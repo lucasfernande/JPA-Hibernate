@@ -13,9 +13,19 @@ public class Programa {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");
 		EntityManager em = emf.createEntityManager();
 		
+		/*
+		 *  para remover um elemento do banco de dados, ele tem que ser monitorado, ou seja,
+		 *   ou ele tem que acabar de ter sido inserido, ou deve ser recuperado do banco de dados (como no exemplo abaixo) e
+		 *   ser removido antes do EntityManager ser fechado	 
+		 */
+		
+		em.getTransaction().begin(); // quando não for uma operação de consulta, tem que colocar a transação
+		
 		Pessoa p = em.find(Pessoa.class, 2);
+        em.remove(p);
         
-		System.out.println(p);
+		em.getTransaction().commit();
+		
         System.out.println("Pronto!");
         em.close();
         emf.close();
